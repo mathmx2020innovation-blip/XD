@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Cafetería Morales | Menús y Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fef7e8;
+            color: #2e241f;
+            scroll-behavior: smooth;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* HEADER - RESPONSIVE */
+        header {
+            background-color: #3b2a1f;
+            color: #fff3e0;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+        .logo p {
+            font-size: 0.7rem;
+            opacity: 0.85;
+        }
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #fff3e0;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            padding: 5px 8px;
+            border-radius: 20px;
+        }
+        .nav-links a:hover {
+            background: #d48c3b;
+        }
+        
+        /* SECCIONES */
+        section {
+            padding: 50px 0;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 35px;
+            text-align: center;
+            color: #4a2e22;
+            position: relative;
+        }
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #d48c3b;
+            margin: 12px auto 0;
+            border-radius: 4px;
+        }
+        
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #fcf3e4 0%, #f8e9d8 100%);
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .hero h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .hero p {
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #5a4a3a;
+            line-height: 1.5;
+        }
+        
+        /* MENÚS - TARJETAS RESPONSIVAS */
+        .menu-section {
+            margin-bottom: 40px;
+        }
+        .menu-card-wrapper {
+            background: white;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+        }
+        .menu-header-card {
+            background: linear-gradient(135deg, #3b2a1f, #5a3e2c);
+            padding: 20px 24px;
+            color: white;
+        }
+        .menu-header-card h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .menu-header-card h2 i {
+            font-size: 1.8rem;
+            color: #f7c873;
+        }
+        .menu-header-card .horario {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            opacity: 0.9;
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+        .menu-items-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4px;
+            padding: 16px 20px 20px;
+        }
+        .menu-item {
+            padding: 14px 8px;
+            border-bottom: 1px solid #f0e2cf;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        .item-info {
+            flex: 2;
+        }
+        .item-nombre {
+            font-weight: 800;
+            font-size: 1rem;
+            color: #2e241f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .item-nombre i {
+            color: #d48c3b;
+            font-size: 1rem;
+            width: 22px;
+        }
+        .item-desc {
+            font-size: 0.75rem;
+            color: #7a6652;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        .item-precio {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #d48c3b;
+            background: #fff0e0;
+            padding: 4px 12px;
+            border-radius: 30px;
+            min-width: 70px;
+            text-align: center;
+        }
+        .badge {
+            background: #d48c3b20;
+            color: #b56a2a;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 5px;
+        }
+        
+        /* UBICACIÓN - RESPONSIVE */
+        .ubicacion-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: center;
+        }
+        .ubi-info {
+            flex: 1;
+            background: white;
+            padding: 24px;
+            border-radius: 32px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .ubi-info p {
+            margin: 14px 0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .ubi-info i {
+            color: #d48c3b;
+            width: 24px;
+            font-size: 1.1rem;
+        }
+        .mapa-placeholder {
+            flex: 1;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            height: 240px;
+        }
+        .mapa-placeholder iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        
+        /* POR QUÉ ELEGIRNOS */
+        .razones-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .razon-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px 16px;
+            flex: 1;
+            min-width: 160px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+            border: 1px solid #f0e2cf;
+        }
+        .razon-card i {
+            font-size: 2rem;
+            color: #d48c3b;
+            margin-bottom: 12px;
+        }
+        .razon-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .razon-card p {
+            font-size: 0.8rem;
+            color: #7a6652;
+        }
+        
+        /* ESENCIA - RESPONSIVE */
+        .esencia-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+        .esencia-card {
+            background: white;
+            border-radius: 32px;
+            padding: 28px 20px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border-bottom: 4px solid #d48c3b;
+        }
+        .esencia-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #3b2a1f;
+        }
+        .esencia-card p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #5a4a3a;
+        }
+        .valores-list {
+            list-style: none;
+            text-align: left;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .valores-list li {
+            margin: 12px 0;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .valores-list li i {
+            color: #d48c3b;
+            width: 24px;
+        }
+        
+        footer {
+            background: #2c241e;
+            color: #e6d5bf;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+        }
+        
+        /* CHATBOT - MÓVIL */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .chat-toggle {
+            background: #3b2a1f;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+            border: none;
+            color: white;
+            font-size: 26px;
+            transition: 0.2s;
+        }
+        .chat-toggle:hover {
+            background: #d48c3b;
+            transform: scale(1.05);
+        }
+        .chat-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 90vw;
+            max-width: 360px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid #f0e2cf;
+        }
+        .chat-header {
+            background: #3b2a1f;
+            color: white;
+            padding: 14px 16px;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .chat-messages {
+            height: 350px;
+            overflow-y: auto;
+            padding: 14px;
+            background: #fefaf2;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .bot-msg, .user-msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 22px;
+            font-size: 0.85rem;
+        }
+        .bot-msg {
+            background: #e9dbc9;
+            align-self: flex-start;
+        }
+        .user-msg {
+            background: #d48c3b;
+            color: white;
+            align-self: flex-end;
+        }
+        .opciones-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .btn-opcion {
+            background: #3b2a1f;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        .btn-opcion:hover {
+            background: #d48c3b;
+        }
+        .chat-input-area {
+            border-top: 1px solid #e9dbc9;
+            background: #f9f3ea;
+            padding: 10px;
+            text-align: center;
+        }
+        .chat-input-area p {
+            font-size: 0.75rem;
+            color: #5a4a3a;
+        }
+        
+        /* MEDIA QUERIES PARA TABLET Y ESCRITORIO */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 40px;
+            }
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            .nav-links {
+                gap: 32px;
+            }
+            .nav-links a {
+                font-size: 1rem;
+            }
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.2rem;
+            }
+            .section-title {
+                font-size: 2.5rem;
+                margin-bottom: 50px;
+            }
+            .menu-items-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 8px;
+                padding: 20px 30px 30px;
+            }
+            .menu-header-card h2 {
+                font-size: 2rem;
+            }
+            .item-nombre {
+                font-size: 1.1rem;
+            }
+            .item-desc {
+                font-size: 0.85rem;
+            }
+            .item-precio {
+                font-size: 1.2rem;
+            }
+            .razon-card {
+                padding: 32px 20px;
+            }
+            .esencia-card {
+                padding: 35px 28px;
+            }
+            .esencia-card h3 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .menu-items-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Ajustes para pantallas muy pequeñas */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            .menu-header-card {
+                padding: 16px 18px;
+            }
+            .menu-items-grid {
+                padding: 12px 16px 16px;
+            }
+            .item-nombre {
+                font-size: 0.95rem;
+            }
+            .ubi-info p {
+                font-size: 0.85rem;
+            }
+            .chat-window {
+                width: 85vw;
+                right: -10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container nav-container">
+        <div class="logo">
+            <h1>☕ Cafetería Morales</h1>
+            <p>Sabor y tradición en el campus ASU Querétaro</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#menus">🍽️ Menús</a></li>
+            <li><a href="#ubicacion">📍 Ubicación</a></li>
+            <li><a href="#razones">✨ Ventajas</a></li>
+            <li><a href="#esencia">🌿 Esencia</a></li>
+        </ul>
+    </div>
+</header>
+
+<main>
+    <div class="hero">
+        <div class="container">
+            <h2>Bienvenidos a tu lugar</h2>
+            <p>Comida casera, ambiente universitario y la mejor atención en Arkansas State University Campus Querétaro.</p>
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE MENÚS -->
+    <section id="menus">
+        <div class="container">
+            <div class="section-title">🍽️ Nuestros Menús</div>
+            
+            <!-- MENÚ DESAYUNO -->
+            <div class="menu-card-wrapper">
+                <div class="menu-header-card">
+                    <h2><i class="fas fa-sun"></i> Desayuno</h2>
+                    <span class="horario"><i class="far fa-clock"></i> 7:00 AM - 11:30 AM</span>
+                </div>
+                <div class="menu-items-grid">
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-pepper-hot"></i> Chilaquiles verdes/rojos <span class="badge">⭐ Más pedido</span></div><div class="item-desc">Con pollo, crema, queso fresco y frijoles</div></div><div class="item-precio">$75</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-egg"></i> Huevos al gusto</div><div class="item-desc">Revueltos, estrellados o a la mexicana, con papas</div></div><div class="item-precio">$65</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-cake"></i> Hot cakes de avena</div><div class="item-desc">Con miel de maple y frutas frescas</div></div><div class="item-precio">$70</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-bread-slice"></i> Pan francés</div><div class="item-desc">Con cajeta o mermelada + café americano</div></div><div class="item-precio">$58</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-mug-hot"></i> Café de olla</div><div class="item-desc">Tradicional con canela y piloncillo</div></div><div class="item-precio">$32</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-apple-alt"></i> Smoothie verde energético</div><div class="item-desc">Espinaca, piña, jengibre y manzana</div></div><div class="item-precio">$48</div></div>
+                </div>
+            </div>
+
+            <!-- MENÚ COMIDA -->
+            <div class="menu-card-wrapper">
+                <div class="menu-header-card">
+                    <h2><i class="fas fa-utensils"></i> Comida</h2>
+                    <span class="horario"><i class="far fa-clock"></i> 12:00 PM - 5:00 PM</span>
+                </div>
+                <div class="menu-items-grid">
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-hamburger"></i> Hamburguesa Morales <span class="badge">🔥 Especial</span></div><div class="item-desc">Carne de res, queso panela, aguacate y chipotle</div></div><div class="item-precio">$95</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-utensil-spoon"></i> Enfrijoladas</div><div class="item-desc">Tortillas bañadas en frijol, crema, cebolla y queso</div></div><div class="item-precio">$85</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-taco"></i> Tacos de canasta (4 pzas)</div><div class="item-desc">Surtidos: papa, frijol, adobo, con salsa verde</div></div><div class="item-precio">$60</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-salad"></i> Ensalada César con pollo</div><div class="item-desc">Lechuga romana, crutones, queso parmesano</div></div><div class="item-precio">$88</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-macaroni"></i> Pasta alfredo</div><div class="item-desc">Crema de parmesano, champiñones y espinacas</div></div><div class="item-precio">$92</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-wine-bottle"></i> Agua fresca del día</div><div class="item-desc">Jamaica, horchata o limón</div></div><div class="item-precio">$25</div></div>
+                </div>
+            </div>
+
+            <!-- MENÚ CENA -->
+            <div class="menu-card-wrapper">
+                <div class="menu-header-card">
+                    <h2><i class="fas fa-moon"></i> Cena</h2>
+                    <span class="horario"><i class="far fa-clock"></i> 6:00 PM - 10:00 PM</span>
+                </div>
+                <div class="menu-items-grid">
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-pizza-slice"></i> Pizza Margherita (rebanada)</div><div class="item-desc">Salsa de tomate, mozzarella, albahaca fresca</div></div><div class="item-precio">$55</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-baguette"></i> Sándwich de pavo y aguacate</div><div class="item-desc">Pan artesanal, queso suizo, lechuga, tomate</div></div><div class="item-precio">$72</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-ramen"></i> Tazón de ramen vegetariano <span class="badge">🌱 Sin carne</span></div><div class="item-desc">Caldo de shiitake, fideos, bok choy, huevo</div></div><div class="item-precio">$89</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-burrito"></i> Burrito de noche</div><div class="item-desc">Carne deshebrada, arroz, frijoles, salsa roja</div></div><div class="item-precio">$85</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-cake-candles"></i> Pastel de zanahoria</div><div class="item-desc">Porción generosa con frosting de queso</div></div><div class="item-precio">$45</div></div>
+                    <div class="menu-item"><div class="item-info"><div class="item-nombre"><i class="fas fa-mug-saucer"></i> Infusión relajante</div><div class="item-desc">Manzanilla o té de hierbabuena</div></div><div class="item-precio">$28</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UBICACIÓN -->
+    <section id="ubicacion">
+        <div class="container">
+            <div class="section-title">📍 Dónde encontrarnos</div>
+            <div class="ubicacion-grid">
+                <div class="ubi-info">
+                    <p><i class="fas fa-map-marker-alt"></i> <strong>Arkansas State University Campus Querétaro</strong></p>
+                    <p><i class="fas fa-location-dot"></i> Av. Universidad 123, Juriquilla, 76230 Santiago de Querétaro, Qro.</p>
+                    <p><i class="fas fa-clock"></i> Horario general: Lun - Vie 7:00 AM - 10:00 PM | Sáb 8:00 AM - 6:00 PM</p>
+                    <p><i class="fas fa-phone-alt"></i> Tel: +52 (442) 123 4567</p>
+                    <p><i class="fas fa-bus"></i> A unos pasos del edificio de ingenierías</p>
+                </div>
+                <div class="mapa-placeholder">
+                    <iframe src="https://maps.google.com/maps?q=Arkansas%20State%20University%20Campus%20Queretaro&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POR QUÉ ELEGIRNOS -->
+    <section id="razones">
+        <div class="container">
+            <div class="section-title">🌟 ¿Por qué Cafetería Morales?</div>
+            <div class="razones-grid">
+                <div class="razon-card"><i class="fas fa-leaf"></i><h4>Ingredientes frescos</h4><p>Productos locales y de temporada</p></div>
+                <div class="razon-card"><i class="fas fa-smile"></i><h4>Atención universitaria</h4><p>Entendemos tus horarios</p></div>
+                <div class="razon-card"><i class="fas fa-dollar-sign"></i><h4>Precios justos</h4><p>Calidad-precio inmejorable</p></div>
+                <div class="razon-card"><i class="fas fa-wifi"></i><h4>Ambiente ideal</h4><p>WiFi, área de estudio y música</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ESENCIA -->
+    <section id="esencia">
+        <div class="container">
+            <div class="section-title">🌿 Nuestra Esencia</div>
+            <div class="esencia-grid">
+                <div class="esencia-card">
+                    <h3>📜 Misión</h3>
+                    <p>Ofrecer a la comunidad universitaria alimentos deliciosos, nutritivos y accesibles, elaborados con pasión y compromiso, creando un espacio de encuentro dentro del campus ASU Querétaro.</p>
+                </div>
+                <div class="esencia-card">
+                    <h3>🔭 Visión</h3>
+                    <p>Ser la cafetería referente en los campus de Arkansas State University en México, reconocida por calidad, innovación y calidez, impulsando el bienestar de estudiantes y docentes.</p>
+                </div>
+                <div class="esencia-card">
+                    <h3>⭐ Valores</h3>
+                    <ul class="valores-list">
+                        <li><i class="fas fa-heart"></i> Pasión por el servicio</li>
+                        <li><i class="fas fa-hand-sparkles"></i> Honestidad y transparencia</li>
+                        <li><i class="fas fa-users"></i> Comunidad e inclusión</li>
+                        <li><i class="fas fa-seedling"></i> Sostenibilidad</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <p>📍 Cafetería Morales - Arkansas State University Campus Querétaro</p>
+        <p style="margin-top: 8px;">✨ Síguenos en redes ✨ <i class="fab fa-instagram"></i> @CafeteriaMoralesQro</p>
+        <p>© 2025 • Hecho con café para toda la comunidad universitaria</p>
+    </div>
+</footer>
+
+<!-- CHATBOT CON OPCIONES -->
+<div class="chatbot-container">
+    <button class="chat-toggle" id="chatToggleBtn"><i class="fas fa-comment-dots"></i></button>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <span><i class="fas fa-robot"></i> Asistente</span>
+            <i class="fas fa-times" id="closeChatBtn" style="cursor:pointer;"></i>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <p><i class="fas fa-hand-pointer"></i> Selecciona una opción</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatMessagesDiv = document.getElementById("chatMessages");
+    const chatWindowDiv = document.getElementById("chatWindow");
+    const chatToggle = document.getElementById("chatToggleBtn");
+    const closeChat = document.getElementById("closeChatBtn");
+
+    function addMessage(text, isUser) {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = isUser ? "user-msg" : "bot-msg";
+        msgDiv.textContent = text;
+        chatMessagesDiv.appendChild(msgDiv);
+        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+    }
+
+    function addOptionsButtons(opciones) {
+        const container = document.createElement("div");
+        container.className = "opciones-container";
+        opciones.forEach(opcion => {
+            const btn = document.createElement("button");
+            btn.className = "btn-opcion";
+            btn.textContent = opcion.texto;
+            btn.addEventListener("click", () => {
+                addMessage(opcion.texto, true);
+                setTimeout(() => {
+                    addMessage(opcion.respuesta, false);
+                    if (!opcion.texto.includes("Salir")) {
+                        setTimeout(() => mostrarOpciones(), 600);
+                    }
+                }, 300);
+                container.remove();
+            });
+            container.appendChild(btn);
+        });
+        chatMessagesDiv.appendChild(container);
+        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+    }
+
+    function mostrarOpciones() {
+        const opciones = [
+            { texto: "🍳 Desayuno", respuesta: "🌞 Desayuno (7:00-11:30): Chilaquiles $75, Huevos $65, Hot cakes $70, Pan francés $58, Café de olla $32, Smoothie $48." },
+            { texto: "🌮 Comida", respuesta: "🍽️ Comida (12:00-17:00): Hamburguesa $95, Enfrijoladas $85, Tacos canasta $60, Ensalada César $88, Pasta Alfredo $92, Agua fresca $25." },
+            { texto: "🌙 Cena", respuesta: "🌙 Cena (18:00-22:00): Pizza $55, Sándwich $72, Ramen $89, Burrito $85, Pastel zanahoria $45, Infusión $28." },
+            { texto: "⏰ Horarios", respuesta: "📅 Horarios: Desayuno 7-11:30, Comida 12-17, Cena 18-22 hrs. General: Lun-Vie 7am-10pm, Sáb 8am-6pm." },
+            { texto: "📍 Ubicación", respuesta: "📍 Arkansas State University Campus Querétaro, Av. Universidad 123, Juriquilla. Frente al edificio de ingenierías." },
+            { texto: "❓ Sobre nosotros", respuesta: "☕ Cafetería Morales: ingredientes frescos, atención universitaria, ambiente ideal. Misión: comida deliciosa y accesible." },
+            { texto: "🚪 Salir", respuesta: "¡Gracias por visitarnos! 😊 Vuelve pronto. Haz clic en el ícono para volver a consultar." }
+        ];
+        addOptionsButtons(opciones);
+    }
+
+    chatToggle.addEventListener("click", () => {
+        if (chatWindowDiv.style.display === "flex") {
+            chatWindowDiv.style.display = "none";
+        } else {
+            chatWindowDiv.style.display = "flex";
+            if (chatMessagesDiv.children.length === 0) {
+                addMessage("¡Bienvenido! ☕ Selecciona una opción:", false);
+                mostrarOpciones();
+            } else if (!document.querySelector(".opciones-container")) {
+                mostrarOpciones();
+            }
+        }
+    });
+    closeChat.addEventListener("click", () => { chatWindowDiv.style.display = "none"; });
+    chatWindowDiv.style.display = "none";
+</script>
+</body>
+</html>
